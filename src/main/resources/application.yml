@@ -1,0 +1,21 @@
+spring:
+  profiles: local
+
+server:
+  port: 9140
+
+eureka:
+  client:
+    instance:
+      hostname: inspection-service
+---
+spring:
+  profiles: qa
+
+server:
+  port: 9140
+
+eureka:
+  client:
+    instance:
+      hostname: inspection-service
