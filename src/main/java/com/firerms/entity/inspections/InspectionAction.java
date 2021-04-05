@@ -18,9 +18,8 @@ public class InspectionAction implements TenantSupport {
     @Column(name = "INSPECTION_ACTION_ID")
     @GeneratedValue(strategy=GenerationType.IDENTITY)
     private Long inspectionActionId;
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name ="INSPECTION_ID")
-    private Inspection inspectionId;
+    @Column(name ="INSPECTION_ID")
+    private Long inspectionId;
     @Column(name = "ACTION")
     private String action;
     @Column(name = "DATE")
@@ -35,7 +34,7 @@ public class InspectionAction implements TenantSupport {
     public InspectionAction() {
     }
 
-    public InspectionAction(Long inspectionActionId, Inspection inspectionId, String action, Date date,
+    public InspectionAction(Long inspectionActionId, Long inspectionId, String action, Date date,
                             String description, String narrative, Long fdid) {
         this.inspectionActionId = inspectionActionId;
         this.inspectionId = inspectionId;
@@ -50,7 +49,7 @@ public class InspectionAction implements TenantSupport {
         return inspectionActionId;
     }
 
-    public Inspection getInspectionId() {
+    public Long getInspectionId() {
         return inspectionId;
     }
 
