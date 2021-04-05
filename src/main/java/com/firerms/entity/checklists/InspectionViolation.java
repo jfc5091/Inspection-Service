@@ -6,7 +6,9 @@ import org.hibernate.annotations.FilterDef;
 import org.hibernate.annotations.ParamDef;
 
 import javax.persistence.*;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 @Entity
 @Table(name = "INSPECTION_VIOLATION")
@@ -36,6 +38,12 @@ public class InspectionViolation implements TenantSupport {
     private Date abateDate;
     @Column(name = "DATE_CORRECTED")
     private Date dateCorrected;
+    @OneToMany(
+            mappedBy = "inspectionViolationId",
+            orphanRemoval = true,
+            fetch = FetchType.EAGER
+    )
+    private final List<InspectionViolationImageUrl> inspectionViolationImageUrlList = new ArrayList<>();
     @Column(name = "FDID")
     private Long fdid;
 
@@ -98,6 +106,10 @@ public class InspectionViolation implements TenantSupport {
         return fdid;
     }
 
+    public List<InspectionViolationImageUrl> getInspectionViolationImageUrlList() {
+        return inspectionViolationImageUrlList;
+    }
+
     public void setFdid(Long fdid) {
         this.fdid = fdid;
     }
@@ -105,5 +117,15 @@ public class InspectionViolation implements TenantSupport {
     @Override
     public void setTenantId(String fdid) {
         this.fdid = Long.valueOf(fdid);
+    }
+
+    public void addInspectionViolationImageUrl(InspectionViolationImageUrl inspectionViolationImageUrl) {
+        if (!this.inspectionViolationImageUrlList.contains(inspectionViolationImageUrl)) {
+            this.inspectionViolationImageUrlList.add(inspectionViolationImageUrl);
+        }
+    }
+
+    public void deleteInspectionViolationImageUrl(InspectionViolationImageUrl inspectionViolationImageUrl) {
+        this.inspectionViolationImageUrlList.remove(inspectionViolationImageUrl);
     }
 }

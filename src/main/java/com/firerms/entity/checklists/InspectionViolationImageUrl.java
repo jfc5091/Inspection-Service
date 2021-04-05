@@ -11,25 +11,32 @@ import javax.persistence.*;
 @Table(name = "INSPECTION_VIOLATION_IMAGE")
 @FilterDef(name = "tenantFilter", parameters = {@ParamDef(name = "FDID", type = "string")})
 @Filter(name = "tenantFilter", condition = "FDID = :FDID")
-public class InspectionViolationImage implements TenantSupport {
+public class InspectionViolationImageUrl implements TenantSupport {
 
     @Id
     @Column(name = "INSPECTION_VIOLATION_IMAGE_ID")
     @GeneratedValue(strategy=GenerationType.IDENTITY)
     private Long inspectionViolationImageId;
-    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name ="INSPECTION_VIOLATION_ID")
-    private InspectionViolation inspectionViolationId;
+    private Long inspectionViolationId;
     @Column(name = "IMAGE_URL")
     private String imageUrl;
     @Column(name = "FDID")
     private Long fdid;
 
-    public InspectionViolationImage() {
+    public InspectionViolationImageUrl() {
     }
 
-    public InspectionViolationImage(Long inspectionViolationImageId, InspectionViolation inspectionViolationId,
-                                    String imageUrl, Long fdid) {
+    public InspectionViolationImageUrl(Long inspectionViolationId,
+                                       String imageUrl, Long fdid) {
+        this.inspectionViolationImageId = null;
+        this.inspectionViolationId = inspectionViolationId;
+        this.imageUrl = imageUrl;
+        this.fdid = fdid;
+    }
+
+    public InspectionViolationImageUrl(Long inspectionViolationImageId, Long inspectionViolationId,
+                                       String imageUrl, Long fdid) {
         this.inspectionViolationImageId = inspectionViolationImageId;
         this.inspectionViolationId = inspectionViolationId;
         this.imageUrl = imageUrl;
@@ -40,7 +47,7 @@ public class InspectionViolationImage implements TenantSupport {
         return inspectionViolationImageId;
     }
 
-    public InspectionViolation getInspectionViolationId() {
+    public Long getInspectionViolationId() {
         return inspectionViolationId;
     }
 
