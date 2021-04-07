@@ -20,12 +20,14 @@ public class InspectionViolation implements TenantSupport {
     @Column(name = "INSPECTION_VIOLATION_ID")
     @GeneratedValue(strategy=GenerationType.IDENTITY)
     private Long inspectionViolationId;
-    @OneToOne(cascade = CascadeType.ALL)
-    @JoinColumn(name ="FIRE_CODE_ID")
-    private FireCode fireCodeId;
-    @OneToOne(cascade = CascadeType.ALL)
-    @JoinColumn(name ="INSPECTION_VIOLATION_STATUS_ID")
-    private InspectionViolationStatus inspectionViolationStatusId;
+    @Column(name ="FIRE_CODE_ID")
+    private Long fireCodeId;
+    @Column(name ="INSPECTION_VIOLATION_STATUS_ID")
+    private Long inspectionViolationStatusId;
+    @Column(name ="INSPECTION_ID")
+    private Long inspectionId;
+    @Column(name ="INSPECTION_CHECKLIST_ITEM_ID")
+    private Long inspectionChecklistItemId;
     @Column(name = "DESCRIPTION")
     private String description;
     @Column(name = "LOCATION")
@@ -50,13 +52,14 @@ public class InspectionViolation implements TenantSupport {
     public InspectionViolation() {
     }
 
-    public InspectionViolation(Long inspectionViolationId, FireCode fireCodeId,
-                               InspectionViolationStatus inspectionViolationStatusId, String description,
-                               String location, String narrative, Date dateFound, Date abateDate, Date dateCorrected,
-                               Long fdid) {
+    public InspectionViolation(Long inspectionViolationId, Long fireCodeId, Long inspectionViolationStatusId,
+                               Long inspectionId, Long inspectionChecklistItemId, String description, String location,
+                               String narrative, Date dateFound, Date abateDate, Date dateCorrected, Long fdid) {
         this.inspectionViolationId = inspectionViolationId;
         this.fireCodeId = fireCodeId;
         this.inspectionViolationStatusId = inspectionViolationStatusId;
+        this.inspectionId = inspectionId;
+        this.inspectionChecklistItemId = inspectionChecklistItemId;
         this.description = description;
         this.location = location;
         this.narrative = narrative;
@@ -70,12 +73,20 @@ public class InspectionViolation implements TenantSupport {
         return inspectionViolationId;
     }
 
-    public FireCode getFireCodeId() {
+    public Long getFireCodeId() {
         return fireCodeId;
     }
 
-    public InspectionViolationStatus getInspectionViolationStatusId() {
+    public Long getInspectionViolationStatusId() {
         return inspectionViolationStatusId;
+    }
+
+    public Long getInspectionId() {
+        return inspectionId;
+    }
+
+    public Long getInspectionChecklistItemId() {
+        return inspectionChecklistItemId;
     }
 
     public String getDescription() {

@@ -28,9 +28,8 @@ public class PropertyOccupant implements TenantSupport {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name ="ADDRESS_ID")
     private Address addressId;
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name ="PROPERTY_ID")
-    private Property propertyId;
+    @Column(name ="PROPERTY_ID")
+    private Long propertyId;
     @Column(name = "FDID")
     private Long fdid;
 
@@ -38,7 +37,7 @@ public class PropertyOccupant implements TenantSupport {
     }
 
     public PropertyOccupant(Long propertyOccupantId, String firstName, String lastName, String phone, String fax,
-                            Address addressId, Property propertyId, Long fdid) {
+                            Address addressId, Long propertyId, Long fdid) {
         this.propertyOccupantId = propertyOccupantId;
         this.firstName = firstName;
         this.lastName = lastName;
@@ -73,7 +72,7 @@ public class PropertyOccupant implements TenantSupport {
         return addressId;
     }
 
-    public Property getPropertyId() {
+    public Long getPropertyId() {
         return propertyId;
     }
 

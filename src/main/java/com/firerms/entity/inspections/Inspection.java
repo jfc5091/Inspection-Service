@@ -1,5 +1,6 @@
 package com.firerms.entity.inspections;
 
+import com.firerms.entity.checklists.InspectionChecklist;
 import com.firerms.entity.property.Property;
 import com.firerms.multiTenancy.TenantSupport;
 import org.hibernate.annotations.Filter;
@@ -18,12 +19,12 @@ public class Inspection implements TenantSupport {
     @Column(name = "INSPECTION_ID")
     @GeneratedValue(strategy=GenerationType.IDENTITY)
     private Long inspectionId;
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name ="PROPERTY_ID")
-    private Property propertyId;
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name ="INSPECTOR_ID")
-    private Inspector inspectorId;
+    @Column(name ="PROPERTY_ID")
+    private Long propertyId;
+    @Column(name ="INSPECTOR_ID")
+    private Long inspectorId;
+    @Column(name ="INSPECTION_CHECKLIST_ID")
+    private Long inspectionChecklistId;
     @Column(name = "STATUS")
     private String status;
     @Column(name = "NARRATIVE")
@@ -38,11 +39,13 @@ public class Inspection implements TenantSupport {
     public Inspection() {
     }
 
-    public Inspection(Long inspectionId, Property propertyId, Inspector inspectorId, String status, String narrative,
+    public Inspection(Long inspectionId, Long propertyId, Long inspectorId,
+                      Long inspectionChecklistId, String status, String narrative,
                       String occupantSignatureUrl, String inspectorSignatureUrl, Long fdid) {
         this.inspectionId = inspectionId;
         this.propertyId = propertyId;
         this.inspectorId = inspectorId;
+        this.inspectionChecklistId = inspectionChecklistId;
         this.status = status;
         this.narrative = narrative;
         this.occupantSignatureUrl = occupantSignatureUrl;
@@ -54,12 +57,16 @@ public class Inspection implements TenantSupport {
         return inspectionId;
     }
 
-    public Property getPropertyId() {
+    public Long getPropertyId() {
         return propertyId;
     }
 
-    public Inspector getInspectorId() {
+    public Long getInspectorId() {
         return inspectorId;
+    }
+
+    public Long getInspectionChecklistId() {
+        return inspectionChecklistId;
     }
 
     public String getStatus() {
@@ -81,8 +88,6 @@ public class Inspection implements TenantSupport {
     public Long getFdid() {
         return fdid;
     }
-
-
 
     public void setFdid(Long fdid) {
         this.fdid = fdid;

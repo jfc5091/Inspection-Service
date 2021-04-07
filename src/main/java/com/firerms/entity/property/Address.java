@@ -31,9 +31,8 @@ public class Address implements TenantSupport {
     private double longitude;
     @Column(name = "LATITUDE")
     private double latitude;
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name ="ADDRESS_TYPE_ID")
-    private AddressType addressTypeId;
+    @Column(name ="ADDRESS_TYPE_ID")
+    private Long addressTypeId;
     @Column(name = "ENABLED")
     private boolean enabled;
     @Column(name = "FDID")
@@ -43,7 +42,7 @@ public class Address implements TenantSupport {
     }
 
     public Address(Long addressId, String addressLine1, String addressLine2, String city, String state, String zip,
-                   double longitude, double latitude, AddressType addressTypeId, boolean enabled, Long fdid) {
+                   double longitude, double latitude, Long addressTypeId, boolean enabled, Long fdid) {
         this.addressId = addressId;
         this.addressLine1 = addressLine1;
         this.addressLine2 = addressLine2;
@@ -89,7 +88,7 @@ public class Address implements TenantSupport {
         return latitude;
     }
 
-    public AddressType getAddressTypeId() {
+    public Long getAddressTypeId() {
         return addressTypeId;
     }
 

@@ -18,9 +18,6 @@ public class InspectionChecklist implements TenantSupport {
     @Column(name = "INSPECTION_CHECKLIST_ID")
     @GeneratedValue(strategy=GenerationType.IDENTITY)
     private Long inspectionChecklistId;
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name ="INSPECTION_ID")
-    private Property inspectionId;
     @Column(name = "TYPE")
     private String type;
     @Column(name = "ENABLED")
@@ -31,10 +28,9 @@ public class InspectionChecklist implements TenantSupport {
     public InspectionChecklist() {
     }
 
-    public InspectionChecklist(Long inspectionChecklistId, Property inspectionId, String type, boolean enabled,
+    public InspectionChecklist(Long inspectionChecklistId, String type, boolean enabled,
                                Long fdid) {
         this.inspectionChecklistId = inspectionChecklistId;
-        this.inspectionId = inspectionId;
         this.type = type;
         this.enabled = enabled;
         this.fdid = fdid;
@@ -42,10 +38,6 @@ public class InspectionChecklist implements TenantSupport {
 
     public Long getInspectionChecklistId() {
         return inspectionChecklistId;
-    }
-
-    public Property getInspectionId() {
-        return inspectionId;
     }
 
     public String getType() {

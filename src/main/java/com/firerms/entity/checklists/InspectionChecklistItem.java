@@ -17,16 +17,11 @@ public class InspectionChecklistItem implements TenantSupport {
     @Column(name = "INSPECTION_CHECKLIST_ITEM_ID")
     @GeneratedValue(strategy=GenerationType.IDENTITY)
     private Long inspectionChecklistItemId;
+    @Column(name ="INSPECTION_CHECKLIST_ID")
+    private Long inspectionChecklistId;
+    @Column(name ="FIRE_CODE_ID")
+    private Long fireCodeId;
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name ="INSPECTION_CHECKLIST_ID")
-    private InspectionChecklist inspectionChecklistId;
-    @OneToOne(cascade = CascadeType.ALL)
-    @JoinColumn(name ="FIRE_CODE_ID")
-    private FireCode fireCodeId;
-    @OneToOne(cascade = CascadeType.ALL)
-    @JoinColumn(name ="INSPECTION_VIOLATION_ID")
-    private InspectionViolation inspectionViolationId;
-    @OneToOne(cascade = CascadeType.ALL)
     @JoinColumn(name ="INSPECTION_CHECKLIST_ITEM_STATUS_ID")
     private InspectionChecklistItemStatus inspectionChecklistItemStatusId;
     @Column(name = "DESCRIPTION")
@@ -37,14 +32,12 @@ public class InspectionChecklistItem implements TenantSupport {
     public InspectionChecklistItem() {
     }
 
-    public InspectionChecklistItem(Long inspectionChecklistItemId, InspectionChecklist inspectionChecklistId,
-                                   FireCode fireCodeId, InspectionViolation inspectionViolationId,
-                                   InspectionChecklistItemStatus inspectionChecklistItemStatusId, String description,
+    public InspectionChecklistItem(Long inspectionChecklistItemId, Long inspectionChecklistId,
+                                   Long fireCodeId, InspectionChecklistItemStatus inspectionChecklistItemStatusId, String description,
                                    Long fdid) {
         this.inspectionChecklistItemId = inspectionChecklistItemId;
         this.inspectionChecklistId = inspectionChecklistId;
         this.fireCodeId = fireCodeId;
-        this.inspectionViolationId = inspectionViolationId;
         this.inspectionChecklistItemStatusId = inspectionChecklistItemStatusId;
         this.description = description;
         this.fdid = fdid;
@@ -54,16 +47,12 @@ public class InspectionChecklistItem implements TenantSupport {
         return inspectionChecklistItemId;
     }
 
-    public InspectionChecklist getInspectionChecklistId() {
+    public Long getInspectionChecklistId() {
         return inspectionChecklistId;
     }
 
-    public FireCode getFireCodeId() {
+    public Long getFireCodeId() {
         return fireCodeId;
-    }
-
-    public InspectionViolation getInspectionViolationId() {
-        return inspectionViolationId;
     }
 
     public InspectionChecklistItemStatus getInspectionChecklistItemStatusId() {
