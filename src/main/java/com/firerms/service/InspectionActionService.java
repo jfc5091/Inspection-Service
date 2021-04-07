@@ -3,10 +3,12 @@ package com.firerms.service;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.firerms.amazon.s3.AmazonS3ClientServiceInterface;
+import com.firerms.entity.inspections.Inspection;
 import com.firerms.entity.inspections.InspectionAction;
 import com.firerms.exception.EntityNotFoundException;
 import com.firerms.exception.IdNotNullException;
 import com.firerms.repository.InspectionActionRepository;
+import com.firerms.repository.InspectionRepository;
 import com.firerms.request.InspectionActionRequest;
 import com.firerms.response.InspectionActionResponse;
 import org.slf4j.Logger;
@@ -29,6 +31,9 @@ public class InspectionActionService {
     private InspectionActionRepository inspectionActionRepository;
 
     @Autowired
+    private InspectionRepository inspectionRepository;
+
+    @Autowired
     @Qualifier("ClientService")
     private AmazonS3ClientServiceInterface amazonS3ClientServiceInterface;
 
@@ -46,6 +51,13 @@ public class InspectionActionService {
         InspectionAction inspectionAction = request.getInspectionAction();
         if (inspectionAction.getInspectionActionId() != null) {
             String errorMessage = String.format(MUST_BE_NULL_ERROR_MSG, "Inspection Action");
+            LOG.error("Inspection Service - createInspectionAction request: {}", errorMessage);
+            throw new IdNotNullException(errorMessage);
+        }
+        Long inspectionId = inspectionAction.getInspectionId();
+        Inspection inspectionInDb = inspectionRepository.findByInspectionId(inspectionId);
+        if(inspectionInDb == null) {
+            String errorMessage = String.format(NOT_FOUND_ERROR_MSG, "Inspection", inspectionId);
             LOG.error("Inspection Service - createInspectionAction request: {}", errorMessage);
             throw new IdNotNullException(errorMessage);
         }
@@ -80,6 +92,13 @@ public class InspectionActionService {
             String errorMessage = String.format(NOT_FOUND_ERROR_MSG, "Inspection Action", inspectionActionId);
             LOG.error("Inspection Service - updateInspectionAction request: {}", errorMessage);
             throw new EntityNotFoundException(errorMessage);
+        }
+        Long inspectionId = inspectionAction.getInspectionId();
+        Inspection inspectionInDb = inspectionRepository.findByInspectionId(inspectionId);
+        if(inspectionInDb == null) {
+            String errorMessage = String.format(NOT_FOUND_ERROR_MSG, "Inspection", inspectionId);
+            LOG.error("Inspection Service - createInspectionAction request: {}", errorMessage);
+            throw new IdNotNullException(errorMessage);
         }
         inspectionAction = inspectionActionRepository.save(inspectionAction);
         InspectionActionResponse inspectionActionResponse = new InspectionActionResponse(inspectionAction);

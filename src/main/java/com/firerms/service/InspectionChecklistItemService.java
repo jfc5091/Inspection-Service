@@ -3,10 +3,14 @@ package com.firerms.service;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.firerms.amazon.s3.AmazonS3ClientServiceInterface;
+import com.firerms.entity.checklists.FireCode;
+import com.firerms.entity.checklists.InspectionChecklist;
 import com.firerms.entity.checklists.InspectionChecklistItem;
 import com.firerms.exception.EntityNotFoundException;
 import com.firerms.exception.IdNotNullException;
+import com.firerms.repository.FireCodeRepository;
 import com.firerms.repository.InspectionChecklistItemRepository;
+import com.firerms.repository.InspectionChecklistRepository;
 import com.firerms.request.InspectionChecklistItemRequest;
 import com.firerms.response.InspectionChecklistItemResponse;
 import org.slf4j.Logger;
@@ -29,6 +33,12 @@ public class InspectionChecklistItemService {
     private InspectionChecklistItemRepository inspectionChecklistItemRepository;
 
     @Autowired
+    private InspectionChecklistRepository inspectionChecklistRepository;
+
+    @Autowired
+    private FireCodeRepository fireCodeRepository;
+
+    @Autowired
     @Qualifier("ClientService")
     private AmazonS3ClientServiceInterface amazonS3ClientServiceInterface;
 
@@ -46,6 +56,20 @@ public class InspectionChecklistItemService {
         InspectionChecklistItem inspectionChecklistItem = request.getInspectionChecklistItem();
         if (inspectionChecklistItem.getInspectionChecklistItemId() != null) {
             String errorMessage = String.format(MUST_BE_NULL_ERROR_MSG, "Inspection Checklist Item");
+            LOG.error("Inspection Service - createInspectionChecklistItem request: {}", errorMessage);
+            throw new IdNotNullException(errorMessage);
+        }
+        Long inspectionChecklistId = inspectionChecklistItem.getInspectionChecklistId();
+        InspectionChecklist inspectionChecklistInDb = inspectionChecklistRepository.findByInspectionChecklistId(inspectionChecklistId);
+        if (inspectionChecklistInDb == null) {
+            String errorMessage = String.format(NOT_FOUND_ERROR_MSG, "Inspection Checklist", inspectionChecklistId);
+            LOG.error("Inspection Service - createInspectionChecklistItem request: {}", errorMessage);
+            throw new IdNotNullException(errorMessage);
+        }
+        Long fireCodeId = inspectionChecklistItem.getFireCodeId();
+        FireCode fireCodeInDb = fireCodeRepository.findByFireCodeId(fireCodeId);
+        if (fireCodeInDb == null) {
+            String errorMessage = String.format(NOT_FOUND_ERROR_MSG, "Fire Code", fireCodeId);
             LOG.error("Inspection Service - createInspectionChecklistItem request: {}", errorMessage);
             throw new IdNotNullException(errorMessage);
         }
@@ -80,6 +104,20 @@ public class InspectionChecklistItemService {
             String errorMessage = String.format(NOT_FOUND_ERROR_MSG, "Inspection Checklist Item", inspectionChecklistItemId);
             LOG.error("Inspection Service - updateInspectionChecklistItem request: {}", errorMessage);
             throw new EntityNotFoundException(errorMessage);
+        }
+        Long inspectionChecklistId = inspectionChecklistItem.getInspectionChecklistId();
+        InspectionChecklist inspectionChecklistInDb = inspectionChecklistRepository.findByInspectionChecklistId(inspectionChecklistId);
+        if (inspectionChecklistInDb == null) {
+            String errorMessage = String.format(NOT_FOUND_ERROR_MSG, "Inspection Checklist", inspectionChecklistId);
+            LOG.error("Inspection Service - createInspectionChecklistItem request: {}", errorMessage);
+            throw new IdNotNullException(errorMessage);
+        }
+        Long fireCodeId = inspectionChecklistItem.getFireCodeId();
+        FireCode fireCodeInDb = fireCodeRepository.findByFireCodeId(fireCodeId);
+        if (fireCodeInDb == null) {
+            String errorMessage = String.format(NOT_FOUND_ERROR_MSG, "Fire Code", fireCodeId);
+            LOG.error("Inspection Service - createInspectionChecklistItem request: {}", errorMessage);
+            throw new IdNotNullException(errorMessage);
         }
         inspectionChecklistItem = inspectionChecklistItemRepository.save(inspectionChecklistItem);
         InspectionChecklistItemResponse inspectionChecklistItemResponse = new InspectionChecklistItemResponse(inspectionChecklistItem);

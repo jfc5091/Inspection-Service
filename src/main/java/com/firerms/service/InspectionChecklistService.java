@@ -64,6 +64,11 @@ public class InspectionChecklistService {
             LOG.error("Inspection Service - findInspectionChecklistById request: {}", errorMessage);
             throw new EntityNotFoundException(errorMessage);
         }
+        if (!inspectionChecklist.isEnabled()) {
+            String errorMessage = String.format("InspectionChecklist with id: %s not enabled", inspectionChecklistId);
+            LOG.error("Inspection Service - findInspectionChecklistById request: {}", errorMessage);
+            throw new EntityNotFoundException(errorMessage);
+        }
         InspectionChecklistResponse inspectionChecklistResponse = new InspectionChecklistResponse(inspectionChecklist);
         String responseString = new ObjectMapper().writeValueAsString(inspectionChecklistResponse);
         LOG.info("Inspection Service - successfully found Inspection Checklist: {}", responseString);

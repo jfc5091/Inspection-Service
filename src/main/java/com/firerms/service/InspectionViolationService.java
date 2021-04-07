@@ -3,10 +3,14 @@ package com.firerms.service;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.firerms.amazon.s3.AmazonS3ClientServiceInterface;
+import com.firerms.entity.checklists.FireCode;
+import com.firerms.entity.checklists.InspectionChecklistItem;
 import com.firerms.entity.checklists.InspectionViolation;
+import com.firerms.entity.checklists.InspectionViolationStatus;
+import com.firerms.entity.inspections.Inspection;
 import com.firerms.exception.EntityNotFoundException;
 import com.firerms.exception.IdNotNullException;
-import com.firerms.repository.InspectionViolationRepository;
+import com.firerms.repository.*;
 import com.firerms.request.InspectionViolationRequest;
 import com.firerms.response.InspectionViolationResponse;
 import org.slf4j.Logger;
@@ -29,6 +33,18 @@ public class InspectionViolationService {
     private InspectionViolationRepository inspectionViolationRepository;
 
     @Autowired
+    private FireCodeRepository fireCodeRepository;
+
+    @Autowired
+    private InspectionViolationStatusRepository inspectionViolationStatusRepository;
+
+    @Autowired
+    private InspectionRepository inspectionRepository;
+
+    @Autowired
+    private InspectionChecklistItemRepository inspectionChecklistItemRepository;
+
+    @Autowired
     @Qualifier("ClientService")
     private AmazonS3ClientServiceInterface amazonS3ClientServiceInterface;
 
@@ -40,6 +56,37 @@ public class InspectionViolationService {
     private static final String NOT_FOUND_ERROR_MSG = "%s not found with id: %s";
     private static final String MUST_BE_NULL_ERROR_MSG = "id must be null for new %s";
 
+    private void validateInspectionViolationForeignKeys(InspectionViolation inspectionViolation) {
+        Long fireCodeId = inspectionViolation.getFireCodeId();
+        FireCode fireCode = fireCodeRepository.findByFireCodeId(fireCodeId);
+        if (fireCode == null) {
+            String errorMessage = String.format(NOT_FOUND_ERROR_MSG, "Fire code", fireCodeId);
+            LOG.error("Inspection Service - createInspectionViolation request: {}", errorMessage);
+            throw new IdNotNullException(errorMessage);
+        }
+        Long inspectionViolationStatusId = inspectionViolation.getInspectionViolationStatusId();
+        InspectionViolationStatus inspectionViolationStatus = inspectionViolationStatusRepository.findByInspectionViolationStatusId(inspectionViolationStatusId);
+        if (inspectionViolationStatus == null) {
+            String errorMessage = String.format(NOT_FOUND_ERROR_MSG, "Inspection Violation Status", inspectionViolationStatusId);
+            LOG.error("Inspection Service - createInspectionViolation request: {}", errorMessage);
+            throw new IdNotNullException(errorMessage);
+        }
+        Long inspectionId = inspectionViolation.getInspectionId();
+        Inspection inspection  = inspectionRepository.findByInspectionId(inspectionId);
+        if (inspection == null) {
+            String errorMessage = String.format(NOT_FOUND_ERROR_MSG, "Inspection", inspectionId);
+            LOG.error("Inspection Service - createInspectionViolation request: {}", errorMessage);
+            throw new IdNotNullException(errorMessage);
+        }
+        Long inspectionChecklistItemId = inspectionViolation.getInspectionChecklistItemId();
+        InspectionChecklistItem inspectionChecklistItem  = inspectionChecklistItemRepository.findByInspectionChecklistItemId(inspectionChecklistItemId);
+        if (inspectionChecklistItem == null) {
+            String errorMessage = String.format(NOT_FOUND_ERROR_MSG, "Inspection Checklist Item", inspectionChecklistItemId);
+            LOG.error("Inspection Service - createInspectionViolation request: {}", errorMessage);
+            throw new IdNotNullException(errorMessage);
+        }
+    }
+
     public InspectionViolationResponse createInspectionViolation(InspectionViolationRequest request) throws JsonProcessingException {
         String requestString = new ObjectMapper().writeValueAsString(request);
         LOG.info("Inspection Service - createInspectionViolation request: {}", requestString);
@@ -49,6 +96,7 @@ public class InspectionViolationService {
             LOG.error("Inspection Service - createInspectionViolation request: {}", errorMessage);
             throw new IdNotNullException(errorMessage);
         }
+        validateInspectionViolationForeignKeys(inspectionViolation);
         inspectionViolation = inspectionViolationRepository.save(inspectionViolation);
         InspectionViolationResponse inspectionViolationResponse = new InspectionViolationResponse(inspectionViolation);
         String responseString = new ObjectMapper().writeValueAsString(inspectionViolationResponse);
@@ -81,6 +129,7 @@ public class InspectionViolationService {
             LOG.error("Inspection Service - updateInspectionViolation request: {}", errorMessage);
             throw new EntityNotFoundException(errorMessage);
         }
+        validateInspectionViolationForeignKeys(inspectionViolation);
         inspectionViolation = inspectionViolationRepository.save(inspectionViolation);
         InspectionViolationResponse inspectionViolationResponse = new InspectionViolationResponse(inspectionViolation);
         String responseString = new ObjectMapper().writeValueAsString(inspectionViolationResponse);
