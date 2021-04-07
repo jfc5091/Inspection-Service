@@ -1,10 +1,12 @@
 package com.firerms.service.unit;
 
+import com.firerms.entity.inspections.Inspection;
 import com.firerms.entity.inspections.InspectionAction;
 import com.firerms.exception.EntityNotFoundException;
 import com.firerms.exception.IdNotNullException;
 import com.firerms.multiTenancy.TenantContext;
 import com.firerms.repository.InspectionActionRepository;
+import com.firerms.repository.InspectionRepository;
 import com.firerms.request.InspectionActionRequest;
 import com.firerms.response.InspectionActionResponse;
 import com.firerms.service.InspectionActionService;
@@ -34,6 +36,9 @@ public class InspectionActionServiceUnitTests {
     @Autowired
     private InspectionActionService inspectionActionService;
 
+    @Autowired
+    private InspectionRepository inspectionRepository;
+
     @MockBean
     private InspectionActionRepository inspectionActionRepository;
 
@@ -49,6 +54,7 @@ public class InspectionActionServiceUnitTests {
     void createInspectionActionTest() throws Exception {
         InspectionAction inspectionAction = new InspectionAction(null, 1L, "action", new Date(), "description", "narrative", testFdid);
         when(inspectionActionRepository.save(inspectionAction)).thenReturn(inspectionAction);
+        when(inspectionRepository.findByInspectionId(inspectionAction.getInspectionId())).thenReturn(new Inspection());
         InspectionActionRequest inspectionActionRequest = new InspectionActionRequest(inspectionAction);
 
         InspectionActionResponse updatedInspectionActionResponse = inspectionActionService.createInspectionAction(inspectionActionRequest);
@@ -75,6 +81,21 @@ public class InspectionActionServiceUnitTests {
         );
 
         assertEquals("id must be null for new Inspection Action", exception.getMessage());
+    }
+
+    @Transactional
+    @Test
+    void createInspectionActionInspectionDoesNotExistTest() {
+        InspectionAction inspectionAction = new InspectionAction(1L, 1L, "action", new Date(), "description", "narrative", testFdid);
+        InspectionActionRequest inspectionActionRequest = new InspectionActionRequest(inspectionAction);
+        when(inspectionRepository.findByInspectionId(inspectionAction.getInspectionId())).thenReturn(null);
+
+        EntityNotFoundException exception = assertThrows(
+                EntityNotFoundException.class,
+                () -> inspectionActionService.createInspectionAction(inspectionActionRequest)
+        );
+
+        assertEquals("Inspection Action not found with id: " + inspectionAction.getInspectionId(), exception.getMessage());
     }
 
     @Transactional
@@ -115,6 +136,7 @@ public class InspectionActionServiceUnitTests {
         InspectionAction updateInspectionAction = new InspectionAction(1L, 1L, "new action", new Date(), "new description", "narrative", testFdid);
         when(inspectionActionRepository.findByInspectionActionId(updateInspectionAction.getInspectionActionId())).thenReturn(originalInspectionAction);
         when(inspectionActionRepository.save(updateInspectionAction)).thenReturn(updateInspectionAction);
+        when(inspectionRepository.findByInspectionId(originalInspectionAction.getInspectionId())).thenReturn(new Inspection());
         InspectionActionRequest updatedInspectionActionRequest = new InspectionActionRequest(updateInspectionAction);
 
         InspectionActionResponse updatedInspectionActionResponse = inspectionActionService.updateInspectionAction(updatedInspectionActionRequest);
@@ -142,6 +164,21 @@ public class InspectionActionServiceUnitTests {
         );
 
         assertEquals("Inspection Action not found with id: " + inspectionAction.getInspectionActionId(), exception.getMessage());
+    }
+
+    @Transactional
+    @Test
+    void updateInspectionActionInspectionDoesNotExistTest() {
+        InspectionAction inspectionAction = new InspectionAction(1L, 1L, "action", new Date(), "description", "narrative", testFdid);
+        InspectionActionRequest inspectionActionRequest = new InspectionActionRequest(inspectionAction);
+        when(inspectionRepository.findByInspectionId(inspectionAction.getInspectionId())).thenReturn(null);
+
+        EntityNotFoundException exception = assertThrows(
+                EntityNotFoundException.class,
+                () -> inspectionActionService.updateInspectionAction(inspectionActionRequest)
+        );
+
+        assertEquals("Inspection Action not found with id: " + inspectionAction.getInspectionId(), exception.getMessage());
     }
 
     @Transactional

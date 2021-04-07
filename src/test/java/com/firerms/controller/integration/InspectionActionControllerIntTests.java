@@ -123,6 +123,31 @@ public class InspectionActionControllerIntTests {
     }
 
     @Test
+    @WithMockUser(username = "admin", authorities = { "SUPER_ADMIN" })
+    void createInspectionActionInspectionIdDoesNotExistTest() throws Exception {
+        InspectionAction inspectionAction = new InspectionAction(1L, 1L, "action", new Date(), "description", "narrative", testFdid);
+        String errorMessage = "Inspection Action not found with id: " + inspectionAction.getInspectionId();
+        InspectionActionRequest inspectionActionRequest = new InspectionActionRequest(inspectionAction);
+        String requestJson = new ObjectMapper().writeValueAsString(inspectionActionRequest);
+        when(inspectionActionService.createInspectionAction(any(InspectionActionRequest.class)))
+                .thenThrow(new EntityNotFoundException(errorMessage));
+
+        MvcResult mvcResult = mockMvc.perform(post("/inspection/action/create")
+                .contentType(APPLICATION_JSON_UTF8)
+                .content(requestJson)
+        )
+                .andExpect(status().isUnprocessableEntity())
+                .andReturn();
+
+        assertTrue(mvcResult.getResponse().getContentAsString()
+                .contains("{\"message\":\"" + errorMessage + "\""));
+        assertTrue(mvcResult.getResponse().getContentAsString()
+                .contains("\"status\":404"));
+        assertTrue(mvcResult.getResponse().getContentAsString()
+                .contains("\"timeStamp\":\""));
+    }
+
+    @Test
     void createInspectionActionUnauthorizedTest() throws Exception {
         InspectionAction inspectionAction = new InspectionAction(null, 1L, "action", new Date(), "description", "narrative", testFdid);
         InspectionActionRequest inspectionActionRequest = new InspectionActionRequest(inspectionAction);
@@ -224,6 +249,31 @@ public class InspectionActionControllerIntTests {
 
         assertTrue(mvcResult.getResponse().getContentAsString()
                 .contains("{\"message\":\"" + errorMessage +"\""));
+        assertTrue(mvcResult.getResponse().getContentAsString()
+                .contains("\"status\":404"));
+        assertTrue(mvcResult.getResponse().getContentAsString()
+                .contains("\"timeStamp\":\""));
+    }
+
+    @Test
+    @WithMockUser(username = "admin", authorities = { "SUPER_ADMIN" })
+    void updateInspectionActionInspectionIdDoesNotExistTest() throws Exception {
+        InspectionAction inspectionAction = new InspectionAction(1L, 1L, "action", new Date(), "description", "narrative", testFdid);
+        String errorMessage = "Inspection Action not found with id: " + inspectionAction.getInspectionId();
+        InspectionActionRequest inspectionActionRequest = new InspectionActionRequest(inspectionAction);
+        String requestJson = new ObjectMapper().writeValueAsString(inspectionActionRequest);
+        when(inspectionActionService.updateInspectionAction(any(InspectionActionRequest.class)))
+                .thenThrow(new EntityNotFoundException(errorMessage));
+
+        MvcResult mvcResult = mockMvc.perform(post("/inspection/action/update")
+                .contentType(APPLICATION_JSON_UTF8)
+                .content(requestJson)
+        )
+                .andExpect(status().isUnprocessableEntity())
+                .andReturn();
+
+        assertTrue(mvcResult.getResponse().getContentAsString()
+                .contains("{\"message\":\"" + errorMessage + "\""));
         assertTrue(mvcResult.getResponse().getContentAsString()
                 .contains("\"status\":404"));
         assertTrue(mvcResult.getResponse().getContentAsString()
