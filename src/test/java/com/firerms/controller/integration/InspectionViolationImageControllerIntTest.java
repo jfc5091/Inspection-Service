@@ -1,7 +1,6 @@
 package com.firerms.controller.integration;
 
 import com.amazonaws.AmazonServiceException;
-import com.firerms.controller.InspectionViolationController;
 import com.firerms.controller.InspectionViolationImageController;
 import com.firerms.exception.EntityNotFoundException;
 import com.firerms.multiTenancy.RequestInterceptor;
@@ -9,7 +8,6 @@ import com.firerms.multiTenancy.TenantContext;
 import com.firerms.security.service.CustomUserDetailsService;
 import com.firerms.security.util.JwtUtility;
 import com.firerms.service.InspectionViolationImageService;
-import com.firerms.service.InspectionViolationService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
