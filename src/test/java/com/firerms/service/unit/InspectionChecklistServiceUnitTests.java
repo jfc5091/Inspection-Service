@@ -39,7 +39,7 @@ public class InspectionChecklistServiceUnitTests {
 
     @BeforeEach
     void setCurrentTenant() {
-        TenantContext.setCurrentTenant("1");
+        TenantContext.setCurrentTenant(testFdid.toString());
     }
 
     @Transactional

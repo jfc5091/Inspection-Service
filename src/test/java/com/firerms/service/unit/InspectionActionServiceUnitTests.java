@@ -46,7 +46,7 @@ public class InspectionActionServiceUnitTests {
 
     @BeforeEach
     void setCurrentTenant() {
-        TenantContext.setCurrentTenant("1");
+        TenantContext.setCurrentTenant(testFdid.toString());
     }
 
     @Transactional

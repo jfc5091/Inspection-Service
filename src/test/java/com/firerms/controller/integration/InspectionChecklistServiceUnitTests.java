@@ -44,7 +44,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @ActiveProfiles("local")
 @AutoConfigureMockMvc
 @WebMvcTest(InspectionChecklistController.class)
-public class InspectionChecklistServiceIntTests {
+public class InspectionChecklistServiceUnitTests {
 
     @Autowired
     MockMvc mockMvc;
