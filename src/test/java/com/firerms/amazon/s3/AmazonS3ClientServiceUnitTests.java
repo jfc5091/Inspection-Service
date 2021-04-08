@@ -44,8 +44,8 @@ public class AmazonS3ClientServiceUnitTests {
 
     @Test
     void uploadFileToS3BucketTest() throws IOException, IllegalAccessException {
-        String originalFileName = "inspection-test-image";
-        FileInputStream fis = new FileInputStream("src/test/java/helpers/images/inspection-test-image.jpg");
+        String originalFileName = "inspection-violation-test-image";
+        FileInputStream fis = new FileInputStream("src/test/java/helpers/images/inspection-violation-test-image.jpg");
         MockMultipartFile image = new MockMultipartFile("image", originalFileName + ".png",
                 "image/png", fis);
         String testBucket = "testBucket";
@@ -67,8 +67,8 @@ public class AmazonS3ClientServiceUnitTests {
 
     @Test
     void uploadFileToS3BucketDisablePublicReadAccessTest() throws IOException, IllegalAccessException {
-        String originalFileName = "inspection-test-image";
-        FileInputStream fis = new FileInputStream("src/test/java/helpers/images/inspection-test-image.jpg");
+        String originalFileName = "inspection-violation-test-image";
+        FileInputStream fis = new FileInputStream("src/test/java/helpers/images/inspection-violation-test-image.jpg");
         MockMultipartFile image = new MockMultipartFile("image", originalFileName + ".png",
                 "image/png", fis);
         String testBucket = "testBucket";
@@ -90,7 +90,7 @@ public class AmazonS3ClientServiceUnitTests {
 
     @Test
     void uploadFileToS3BucketFilenameIsEmptyTest() throws IOException, IllegalAccessException {
-        FileInputStream fis = new FileInputStream("src/test/java/helpers/images/inspection-test-image.jpg");
+        FileInputStream fis = new FileInputStream("src/test/java/helpers/images/inspection-violation-test-image.jpg");
         MockMultipartFile image = new MockMultipartFile("image", "",
                 "image/png", fis);
         String testBucket = "testBucket";
@@ -114,7 +114,7 @@ public class AmazonS3ClientServiceUnitTests {
     @Test
     void uploadFileToS3BucketDoesNotHaveFileTypeTest() throws IOException, IllegalAccessException {
         String fileName = "ambiguous";
-        FileInputStream fis = new FileInputStream("src/test/java/helpers/images/inspection-test-image.jpg");
+        FileInputStream fis = new FileInputStream("src/test/java/helpers/images/inspection-violation-test-image.jpg");
         MockMultipartFile image = new MockMultipartFile("image", fileName,
                 "image/png", fis);
         String testBucket = "testBucket";
@@ -136,8 +136,8 @@ public class AmazonS3ClientServiceUnitTests {
 
     @Test
     void uploadFileToS3BucketExceptionTest() throws IOException, IllegalAccessException {
-        String originalFileName = "inspection-test-image";
-        FileInputStream fis = new FileInputStream("src/test/java/helpers/images/inspection-test-image.jpg");
+        String originalFileName = "inspection-violation-test-image";
+        FileInputStream fis = new FileInputStream("src/test/java/helpers/images/inspection-violation-test-image.jpg");
         MockMultipartFile image = new MockMultipartFile("image", originalFileName + ".png",
                 "image/png", fis);
         String testBucket = "testBucket";
