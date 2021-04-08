@@ -62,21 +62,21 @@ public class InspectionService {
         if (property == null) {
             String errorMessage = String.format(NOT_FOUND_ERROR_MSG, "Property", propertyId);
             LOG.error("Inspection Service - createInspectionChecklistItem request: {}", errorMessage);
-            throw new IdNotNullException(errorMessage);
+            throw new EntityNotFoundException(errorMessage);
         }
         Long inspectionChecklistId = inspection.getInspectionChecklistId();
         InspectionChecklist inspectionChecklistInDb = inspectionChecklistRepository.findByInspectionChecklistId(inspectionChecklistId);
         if (inspectionChecklistInDb == null) {
             String errorMessage = String.format(NOT_FOUND_ERROR_MSG, "Inspection Checklist", inspectionChecklistId);
             LOG.error("Inspection Service - createInspectionChecklistItem request: {}", errorMessage);
-            throw new IdNotNullException(errorMessage);
+            throw new EntityNotFoundException(errorMessage);
         }
         Long inspectorId = inspection.getInspectorId();
         Inspector inspector = inspectorRepository.findByInspectorId(inspectorId);
         if (inspector == null) {
             String errorMessage = String.format(NOT_FOUND_ERROR_MSG, "Inspector", inspectorId);
             LOG.error("Inspection Service - createInspectionChecklistItem request: {}", errorMessage);
-            throw new IdNotNullException(errorMessage);
+            throw new EntityNotFoundException(errorMessage);
         }
     }
 

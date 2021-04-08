@@ -57,16 +57,16 @@ public class InspectionActionServiceUnitTests {
         when(inspectionRepository.findByInspectionId(inspectionAction.getInspectionId())).thenReturn(new Inspection());
         InspectionActionRequest inspectionActionRequest = new InspectionActionRequest(inspectionAction);
 
-        InspectionActionResponse updatedInspectionActionResponse = inspectionActionService.createInspectionAction(inspectionActionRequest);
-        InspectionAction updatedInspectionAction = updatedInspectionActionResponse.getInspectionAction();
+        InspectionActionResponse createdInspectionActionResponse = inspectionActionService.createInspectionAction(inspectionActionRequest);
+        InspectionAction createdInspectionAction = createdInspectionActionResponse.getInspectionAction();
 
-        assertNotNull(updatedInspectionAction);
-        assertEquals(inspectionAction.getInspectionId(), updatedInspectionAction.getInspectionId());
-        assertEquals(inspectionAction.getAction(), updatedInspectionAction.getAction());
-        assertEquals(inspectionAction.getDate(), updatedInspectionAction.getDate());
-        assertEquals(inspectionAction.getDescription(), updatedInspectionAction.getDescription());
-        assertEquals(inspectionAction.getNarrative(), updatedInspectionAction.getNarrative());
-        assertEquals(inspectionAction.getFdid(), updatedInspectionAction.getFdid());
+        assertNotNull(createdInspectionAction);
+        assertEquals(inspectionAction.getInspectionId(), createdInspectionAction.getInspectionId());
+        assertEquals(inspectionAction.getAction(), createdInspectionAction.getAction());
+        assertEquals(inspectionAction.getDate(), createdInspectionAction.getDate());
+        assertEquals(inspectionAction.getDescription(), createdInspectionAction.getDescription());
+        assertEquals(inspectionAction.getNarrative(), createdInspectionAction.getNarrative());
+        assertEquals(inspectionAction.getFdid(), createdInspectionAction.getFdid());
     }
 
     @Transactional

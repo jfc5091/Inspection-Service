@@ -59,7 +59,7 @@ public class InspectionActionService {
         if(inspectionInDb == null) {
             String errorMessage = String.format(NOT_FOUND_ERROR_MSG, "Inspection", inspectionId);
             LOG.error("Inspection Service - createInspectionAction request: {}", errorMessage);
-            throw new IdNotNullException(errorMessage);
+            throw new EntityNotFoundException(errorMessage);
         }
         inspectionAction = inspectionActionRepository.save(inspectionAction);
         InspectionActionResponse inspectionActionResponse = new InspectionActionResponse(inspectionAction);
@@ -98,7 +98,7 @@ public class InspectionActionService {
         if(inspectionInDb == null) {
             String errorMessage = String.format(NOT_FOUND_ERROR_MSG, "Inspection", inspectionId);
             LOG.error("Inspection Service - createInspectionAction request: {}", errorMessage);
-            throw new IdNotNullException(errorMessage);
+            throw new EntityNotFoundException(errorMessage);
         }
         inspectionAction = inspectionActionRepository.save(inspectionAction);
         InspectionActionResponse inspectionActionResponse = new InspectionActionResponse(inspectionAction);

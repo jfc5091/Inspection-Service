@@ -62,28 +62,28 @@ public class InspectionViolationService {
         if (fireCode == null) {
             String errorMessage = String.format(NOT_FOUND_ERROR_MSG, "Fire code", fireCodeId);
             LOG.error("Inspection Service - createInspectionViolation request: {}", errorMessage);
-            throw new IdNotNullException(errorMessage);
+            throw new EntityNotFoundException(errorMessage);
         }
         Long inspectionViolationStatusId = inspectionViolation.getInspectionViolationStatusId();
         InspectionViolationStatus inspectionViolationStatus = inspectionViolationStatusRepository.findByInspectionViolationStatusId(inspectionViolationStatusId);
         if (inspectionViolationStatus == null) {
             String errorMessage = String.format(NOT_FOUND_ERROR_MSG, "Inspection Violation Status", inspectionViolationStatusId);
             LOG.error("Inspection Service - createInspectionViolation request: {}", errorMessage);
-            throw new IdNotNullException(errorMessage);
+            throw new EntityNotFoundException(errorMessage);
         }
         Long inspectionId = inspectionViolation.getInspectionId();
         Inspection inspection  = inspectionRepository.findByInspectionId(inspectionId);
         if (inspection == null) {
             String errorMessage = String.format(NOT_FOUND_ERROR_MSG, "Inspection", inspectionId);
             LOG.error("Inspection Service - createInspectionViolation request: {}", errorMessage);
-            throw new IdNotNullException(errorMessage);
+            throw new EntityNotFoundException(errorMessage);
         }
         Long inspectionChecklistItemId = inspectionViolation.getInspectionChecklistItemId();
         InspectionChecklistItem inspectionChecklistItem  = inspectionChecklistItemRepository.findByInspectionChecklistItemId(inspectionChecklistItemId);
         if (inspectionChecklistItem == null) {
             String errorMessage = String.format(NOT_FOUND_ERROR_MSG, "Inspection Checklist Item", inspectionChecklistItemId);
             LOG.error("Inspection Service - createInspectionViolation request: {}", errorMessage);
-            throw new IdNotNullException(errorMessage);
+            throw new EntityNotFoundException(errorMessage);
         }
     }
 

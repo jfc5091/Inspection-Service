@@ -21,9 +21,6 @@ public class InspectionChecklistItem implements TenantSupport {
     private Long inspectionChecklistId;
     @Column(name ="FIRE_CODE_ID")
     private Long fireCodeId;
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name ="INSPECTION_CHECKLIST_ITEM_STATUS_ID")
-    private InspectionChecklistItemStatus inspectionChecklistItemStatusId;
     @Column(name = "DESCRIPTION")
     private String description;
     @Column(name = "FDID")
@@ -33,12 +30,10 @@ public class InspectionChecklistItem implements TenantSupport {
     }
 
     public InspectionChecklistItem(Long inspectionChecklistItemId, Long inspectionChecklistId,
-                                   Long fireCodeId, InspectionChecklistItemStatus inspectionChecklistItemStatusId, String description,
-                                   Long fdid) {
+                                   Long fireCodeId, String description, Long fdid) {
         this.inspectionChecklistItemId = inspectionChecklistItemId;
         this.inspectionChecklistId = inspectionChecklistId;
         this.fireCodeId = fireCodeId;
-        this.inspectionChecklistItemStatusId = inspectionChecklistItemStatusId;
         this.description = description;
         this.fdid = fdid;
     }
@@ -53,10 +48,6 @@ public class InspectionChecklistItem implements TenantSupport {
 
     public Long getFireCodeId() {
         return fireCodeId;
-    }
-
-    public InspectionChecklistItemStatus getInspectionChecklistItemStatusId() {
-        return inspectionChecklistItemStatusId;
     }
 
     public String getDescription() {

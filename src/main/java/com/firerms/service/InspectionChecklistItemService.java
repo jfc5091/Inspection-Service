@@ -64,14 +64,14 @@ public class InspectionChecklistItemService {
         if (inspectionChecklistInDb == null) {
             String errorMessage = String.format(NOT_FOUND_ERROR_MSG, "Inspection Checklist", inspectionChecklistId);
             LOG.error("Inspection Service - createInspectionChecklistItem request: {}", errorMessage);
-            throw new IdNotNullException(errorMessage);
+            throw new EntityNotFoundException(errorMessage);
         }
         Long fireCodeId = inspectionChecklistItem.getFireCodeId();
         FireCode fireCodeInDb = fireCodeRepository.findByFireCodeId(fireCodeId);
         if (fireCodeInDb == null) {
             String errorMessage = String.format(NOT_FOUND_ERROR_MSG, "Fire Code", fireCodeId);
             LOG.error("Inspection Service - createInspectionChecklistItem request: {}", errorMessage);
-            throw new IdNotNullException(errorMessage);
+            throw new EntityNotFoundException(errorMessage);
         }
         inspectionChecklistItem = inspectionChecklistItemRepository.save(inspectionChecklistItem);
         InspectionChecklistItemResponse inspectionChecklistItemResponse = new InspectionChecklistItemResponse(inspectionChecklistItem);
@@ -110,14 +110,14 @@ public class InspectionChecklistItemService {
         if (inspectionChecklistInDb == null) {
             String errorMessage = String.format(NOT_FOUND_ERROR_MSG, "Inspection Checklist", inspectionChecklistId);
             LOG.error("Inspection Service - createInspectionChecklistItem request: {}", errorMessage);
-            throw new IdNotNullException(errorMessage);
+            throw new EntityNotFoundException(errorMessage);
         }
         Long fireCodeId = inspectionChecklistItem.getFireCodeId();
         FireCode fireCodeInDb = fireCodeRepository.findByFireCodeId(fireCodeId);
         if (fireCodeInDb == null) {
             String errorMessage = String.format(NOT_FOUND_ERROR_MSG, "Fire Code", fireCodeId);
             LOG.error("Inspection Service - createInspectionChecklistItem request: {}", errorMessage);
-            throw new IdNotNullException(errorMessage);
+            throw new EntityNotFoundException(errorMessage);
         }
         inspectionChecklistItem = inspectionChecklistItemRepository.save(inspectionChecklistItem);
         InspectionChecklistItemResponse inspectionChecklistItemResponse = new InspectionChecklistItemResponse(inspectionChecklistItem);
