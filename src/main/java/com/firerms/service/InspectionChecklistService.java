@@ -65,7 +65,7 @@ public class InspectionChecklistService {
             throw new EntityNotFoundException(errorMessage);
         }
         if (!inspectionChecklist.isEnabled()) {
-            String errorMessage = String.format("InspectionChecklist with id: %s not enabled", inspectionChecklistId);
+            String errorMessage = String.format("Inspection Checklist with id: %s not enabled", inspectionChecklistId);
             LOG.error("Inspection Service - findInspectionChecklistById request: {}", errorMessage);
             throw new EntityNotFoundException(errorMessage);
         }
