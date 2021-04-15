@@ -36,7 +36,7 @@ public class InspectionActionServiceUnitTests {
     @Autowired
     private InspectionActionService inspectionActionService;
 
-    @Autowired
+    @MockBean
     private InspectionRepository inspectionRepository;
 
     @MockBean
@@ -86,7 +86,7 @@ public class InspectionActionServiceUnitTests {
     @Transactional
     @Test
     void createInspectionActionInspectionDoesNotExistTest() {
-        InspectionAction inspectionAction = new InspectionAction(1L, 1L, "action", new Date(), "description", "narrative", testFdid);
+        InspectionAction inspectionAction = new InspectionAction(null, 1L, "action", new Date(), "description", "narrative", testFdid);
         InspectionActionRequest inspectionActionRequest = new InspectionActionRequest(inspectionAction);
         when(inspectionRepository.findByInspectionId(inspectionAction.getInspectionId())).thenReturn(null);
 
@@ -95,7 +95,7 @@ public class InspectionActionServiceUnitTests {
                 () -> inspectionActionService.createInspectionAction(inspectionActionRequest)
         );
 
-        assertEquals("Inspection Action not found with id: " + inspectionAction.getInspectionId(), exception.getMessage());
+        assertEquals("Inspection not found with id: " + inspectionAction.getInspectionId(), exception.getMessage());
     }
 
     @Transactional

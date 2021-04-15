@@ -26,4 +26,4 @@ spring:
       username: '{cipher}6d83c7d4a94e3fd43cb2d0f390a4cbc02e10f21acf4301f1ec993cf4d1c9dddd8e88b6b344573d6657803df10af46f08'
       password: '{cipher}d76270c4bc57c65bac458a4b1d38aebe993d2096ceaf3b926a6a740e71b8893032196f7807d55a13fe56b97d56701a32'
       uri:
-        - http://service-registry:9110
+        - http://cloud-config-server:9110
