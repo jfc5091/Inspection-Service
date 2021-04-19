@@ -1,5 +1,38 @@
 spring:
   profiles: local
+  datasource:
+    url: jdbc:sqlserver://host.docker.internal:1433;database=INSPECTIONS;encrypt=true;trustServerCertificate=true;loginTimeout=30;
+    username: '{cipher}2aab1ce6e703e5b5884ce7859f6ed5112b814f6d3ce677dfcd020bd3f88f1279'
+    password: '{cipher}a3dd4523b333a707f40306f731da198a4afd9681a81b76ef56c4ce5a58a350b1b0023fa682d68fbb34466abe5f17ae32'
+  jpa:
+    database: SQL_SERVER
+    show-sql: true
+    hibernate:
+      default-schema: dbo
+      dialect: org.hibernate.dialect.SQLServer2012Dialect
+      ddl-auto: none
+      naming:
+        physical-strategy: org.hibernate.boot.model.naming.PhysicalNamingStrategyStandardImpl
+        implicit-strategy: org.hibernate.boot.model.naming.ImplicitNamingStrategyLegacyJpaImpl
+
+#eureka:
+#  client:
+#    register-with-eureka: true
+#    fetch-registry: true
+#    service-url:
+#      defaultZone: http://service-registry:8761/eureka/
+
+jwt-utility-secret: '{cipher}a928c02ee8f7575997738f02ee47988c78938500e980956920a5c519f999ff79c7ee0bd3892f24b25504289d4f4be8da'
+jwt-refresh-expiration-in-ms: 9000000
+
+aws:
+  access:
+    key:
+      id: '{cipher}06051a8e64bbcdbe8dddf6980ef4b15a0cff6f6ff476467d504c92aff30047a4c966744d4062877f5c67990afe6b4c67'
+      secret: '{cipher}6309833f8b09453e6e631c873786d3476ec99e4c2147134656494e2a3a8a16afd784a55d0695fd459bfb8816258c33d6ab1d2408a806f20530d7f13d3e2dbf46'
+  region: "us-east-2"
+  s3:
+    bucket: firermstest-imagetest
 
 server:
   port: 9140
@@ -11,11 +44,46 @@ eureka:
 ---
 spring:
   profiles: qa
+  datasource:
+    url: jdbc:sqlserver://host.docker.internal:1433;database=INSPECTIONS;encrypt=true;trustServerCertificate=true;loginTimeout=30;
+    username: '{cipher}2aab1ce6e703e5b5884ce7859f6ed5112b814f6d3ce677dfcd020bd3f88f1279'
+    password: '{cipher}a3dd4523b333a707f40306f731da198a4afd9681a81b76ef56c4ce5a58a350b1b0023fa682d68fbb34466abe5f17ae32'
+  jpa:
+    database: SQL_SERVER
+    show-sql: true
+    hibernate:
+      default-schema: dbo
+      dialect: org.hibernate.dialect.SQLServer2012Dialect
+      ddl-auto: none
+      naming:
+        physical-strategy: org.hibernate.boot.model.naming.PhysicalNamingStrategyStandardImpl
+        implicit-strategy: org.hibernate.boot.model.naming.ImplicitNamingStrategyLegacyJpaImpl
+
+#eureka:
+#  client:
+#    register-with-eureka: true
+#    fetch-registry: true
+#    service-url:
+#      defaultZone: http://service-registry:8761/eureka/
+
+jwt-utility-secret: '{cipher}a928c02ee8f7575997738f02ee47988c78938500e980956920a5c519f999ff79c7ee0bd3892f24b25504289d4f4be8da'
+jwt-refresh-expiration-in-ms: 9000000
+
+aws:
+  access:
+    key:
+      id: '{cipher}06051a8e64bbcdbe8dddf6980ef4b15a0cff6f6ff476467d504c92aff30047a4c966744d4062877f5c67990afe6b4c67'
+      secret: '{cipher}6309833f8b09453e6e631c873786d3476ec99e4c2147134656494e2a3a8a16afd784a55d0695fd459bfb8816258c33d6ab1d2408a806f20530d7f13d3e2dbf46'
+  region: "us-east-2"
+  s3:
+    bucket: firermstest-imagetest
 
 server:
   port: 9140
 
 eureka:
   client:
+    register-with-eureka: false
+    fetch-registry: false
     instance:
       hostname: inspection-service
