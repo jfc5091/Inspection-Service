@@ -1,7 +1,7 @@
 spring:
   profiles: local
   datasource:
-    url: jdbc:sqlserver://host.docker.internal:1433;database=INSPECTIONS;encrypt=true;trustServerCertificate=true;loginTimeout=30;
+    url: jdbc:sqlserver://localhost:1433;database=INSPECTIONS;encrypt=true;trustServerCertificate=true;loginTimeout=30;
     username: '{cipher}2aab1ce6e703e5b5884ce7859f6ed5112b814f6d3ce677dfcd020bd3f88f1279'
     password: '{cipher}a3dd4523b333a707f40306f731da198a4afd9681a81b76ef56c4ce5a58a350b1b0023fa682d68fbb34466abe5f17ae32'
   jpa:
@@ -15,12 +15,12 @@ spring:
         physical-strategy: org.hibernate.boot.model.naming.PhysicalNamingStrategyStandardImpl
         implicit-strategy: org.hibernate.boot.model.naming.ImplicitNamingStrategyLegacyJpaImpl
 
-#eureka:
-#  client:
-#    register-with-eureka: true
-#    fetch-registry: true
-#    service-url:
-#      defaultZone: http://service-registry:8761/eureka/
+eureka:
+  client:
+    register-with-eureka: false
+    fetch-registry: false
+    instance:
+      hostname: inspection-service
 
 jwt-utility-secret: '{cipher}a928c02ee8f7575997738f02ee47988c78938500e980956920a5c519f999ff79c7ee0bd3892f24b25504289d4f4be8da'
 jwt-refresh-expiration-in-ms: 9000000
@@ -33,21 +33,13 @@ aws:
   region: "us-east-2"
   s3:
     bucket: firermstest-imagetest
-
-server:
-  port: 9140
-
-eureka:
-  client:
-    instance:
-      hostname: inspection-service
 ---
 spring:
   profiles: qa
   datasource:
-    url: jdbc:sqlserver://host.docker.internal:1433;database=INSPECTIONS;encrypt=true;trustServerCertificate=true;loginTimeout=30;
-    username: '{cipher}2aab1ce6e703e5b5884ce7859f6ed5112b814f6d3ce677dfcd020bd3f88f1279'
-    password: '{cipher}a3dd4523b333a707f40306f731da198a4afd9681a81b76ef56c4ce5a58a350b1b0023fa682d68fbb34466abe5f17ae32'
+    url: jdbc:sqlserver://inspection.database.windows.net:1433;database=INSPECTIONS;user=jfc5091@inspection;password=superb!Drift&tune;encrypt=true;trustServerCertificate=false;hostNameInCertificate=*.database.windows.net;loginTimeout=30;
+#    username: '{cipher}2aab1ce6e703e5b5884ce7859f6ed5112b814f6d3ce677dfcd020bd3f88f1279'
+#    password: '{cipher}a3dd4523b333a707f40306f731da198a4afd9681a81b76ef56c4ce5a58a350b1b0023fa682d68fbb34466abe5f17ae32'
   jpa:
     database: SQL_SERVER
     show-sql: true
