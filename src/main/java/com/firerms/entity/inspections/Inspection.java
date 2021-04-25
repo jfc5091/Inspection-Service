@@ -1,7 +1,5 @@
 package com.firerms.entity.inspections;
 
-import com.firerms.entity.checklists.InspectionChecklist;
-import com.firerms.entity.property.Property;
 import com.firerms.multiTenancy.TenantSupport;
 import org.hibernate.annotations.Filter;
 import org.hibernate.annotations.FilterDef;
@@ -96,5 +94,13 @@ public class Inspection implements TenantSupport {
     @Override
     public void setTenantId(String fdid) {
         this.fdid = Long.valueOf(fdid);
+    }
+
+    public void setOccupantSignatureUrl(String occupantSignatureUrl) {
+        this.occupantSignatureUrl = occupantSignatureUrl;
+    }
+
+    public void setInspectorSignatureUrl(String inspectorSignatureUrl) {
+        this.inspectorSignatureUrl = inspectorSignatureUrl;
     }
 }

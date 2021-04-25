@@ -20,7 +20,7 @@ public class Inspector implements TenantSupport {
     @GeneratedValue(strategy=GenerationType.IDENTITY)
     private Long inspectorId;
     @OneToOne(cascade = CascadeType.ALL)
-    @JoinColumn(name ="USERS_ID")
+    @JoinColumn(name ="USER_ID")
     private User usersId;
     @Column(name = "FIRST_NAME")
     private String firstName;

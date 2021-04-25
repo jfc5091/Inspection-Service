@@ -4,7 +4,6 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.firerms.amazon.s3.AmazonS3ClientServiceInterface;
 import com.firerms.entity.checklists.InspectionChecklist;
-import com.firerms.entity.checklists.InspectionViolation;
 import com.firerms.entity.inspections.Inspection;
 import com.firerms.entity.inspections.Inspector;
 import com.firerms.entity.property.Property;
@@ -20,11 +19,14 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
+import java.text.MessageFormat;
 
 @Service
 public class InspectionService {
@@ -140,5 +142,15 @@ public class InspectionService {
         }
         inspectionRepository.delete(inspection);
         LOG.info("Inspection Service - successfully deleted Inspection: {}", inspectionId);
+    }
+
+    public Page<Inspection> getAllInspectionPageable(Integer pageNumber, Integer limit) throws JsonProcessingException {
+        String requestString = MessageFormat.format("Inspection Service - getAllInspectionPageable request: " +
+                "pageNumber: {0}, entitiesPerPage: {1}", pageNumber, limit);
+        LOG.info(requestString);
+        Page<Inspection> allInspection = inspectionRepository.findAll(PageRequest.of(pageNumber, limit));
+        String responseString = new ObjectMapper().writeValueAsString(allInspection.getContent());
+        LOG.info("Inspection Service - successfully got all Inspection: {}", responseString);
+        return allInspection;
     }
 }
