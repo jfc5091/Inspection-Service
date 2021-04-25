@@ -17,7 +17,7 @@ public class InspectionViolationImageUrl implements TenantSupport {
     @Column(name = "INSPECTION_VIOLATION_IMAGE_ID")
     @GeneratedValue(strategy=GenerationType.IDENTITY)
     private Long inspectionViolationImageId;
-    @JoinColumn(name ="INSPECTION_VIOLATION_ID")
+    @Column(name ="INSPECTION_VIOLATION_ID")
     private Long inspectionViolationId;
     @Column(name = "IMAGE_URL")
     private String imageUrl;
