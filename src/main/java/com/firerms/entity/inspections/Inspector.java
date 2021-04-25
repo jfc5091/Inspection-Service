@@ -21,7 +21,7 @@ public class Inspector implements TenantSupport {
     private Long inspectorId;
     @OneToOne(cascade = CascadeType.ALL)
     @JoinColumn(name ="USER_ID")
-    private User usersId;
+    private User userId;
     @Column(name = "FIRST_NAME")
     private String firstName;
     @Column(name = "LAST_NAME")
@@ -34,9 +34,9 @@ public class Inspector implements TenantSupport {
     public Inspector() {
     }
 
-    public Inspector(Long inspectorId, User usersId, String firstName, String lastName, String phone, Long fdid) {
+    public Inspector(Long inspectorId, User userId, String firstName, String lastName, String phone, Long fdid) {
         this.inspectorId = inspectorId;
-        this.usersId = usersId;
+        this.userId = userId;
         this.firstName = firstName;
         this.lastName = lastName;
         this.phone = phone;
@@ -47,8 +47,8 @@ public class Inspector implements TenantSupport {
         return inspectorId;
     }
 
-    public User getUsersId() {
-        return usersId;
+    public User getUserId() {
+        return userId;
     }
 
     public String getFirstName() {
