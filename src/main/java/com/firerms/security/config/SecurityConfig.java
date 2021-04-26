@@ -23,6 +23,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
     @Override
     protected void configure(HttpSecurity http) throws Exception {
+        http.cors();
         http.csrf().disable().authorizeRequests()
                 .antMatchers("/inspection/create").hasAnyAuthority(ADMIN_AUTHORITY, SUPER_ADMIN_AUTHORITY)
                 .antMatchers(HttpMethod.GET, "/inspection/{\\d+}").hasAnyAuthority(USER_AUTHORITY, ADMIN_AUTHORITY, SUPER_ADMIN_AUTHORITY)
