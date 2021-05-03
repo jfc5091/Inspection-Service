@@ -1,11 +1,14 @@
 package com.firerms.entity.inspections;
 
+import com.firerms.entity.checklists.InspectionViolation;
 import com.firerms.multiTenancy.TenantSupport;
 import org.hibernate.annotations.Filter;
 import org.hibernate.annotations.FilterDef;
 import org.hibernate.annotations.ParamDef;
 
 import javax.persistence.*;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @Table(name = "INSPECTION")
@@ -19,8 +22,9 @@ public class Inspection implements TenantSupport {
     private Long inspectionId;
     @Column(name ="PROPERTY_ID")
     private Long propertyId;
-    @Column(name ="INSPECTOR_ID")
-    private Long inspectorId;
+    @OneToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "INSPECTOR_ID")
+    private Inspector inspector;
     @Column(name ="INSPECTION_CHECKLIST_ID")
     private Long inspectionChecklistId;
     @Column(name = "STATUS")
@@ -31,18 +35,30 @@ public class Inspection implements TenantSupport {
     private String occupantSignatureUrl;
     @Column(name = "INSPECTOR_SIGNATURE_URL")
     private String inspectorSignatureUrl;
+    @OneToMany(
+            mappedBy = "inspectionId",
+            cascade = CascadeType.ALL,
+            orphanRemoval = true
+    )
+    private final List<InspectionAction> inspectionActionList = new ArrayList<>();
+    @OneToMany(
+            mappedBy = "inspectionId",
+            cascade = CascadeType.ALL,
+            orphanRemoval = true
+    )
+    private final List<InspectionViolation> inspectionViolationList = new ArrayList<>();
     @Column(name = "FDID")
     private Long fdid;
 
     public Inspection() {
     }
 
-    public Inspection(Long inspectionId, Long propertyId, Long inspectorId,
+    public Inspection(Long inspectionId, Long propertyId, Inspector inspector,
                       Long inspectionChecklistId, String status, String narrative,
                       String occupantSignatureUrl, String inspectorSignatureUrl, Long fdid) {
         this.inspectionId = inspectionId;
         this.propertyId = propertyId;
-        this.inspectorId = inspectorId;
+        this.inspector = inspector;
         this.inspectionChecklistId = inspectionChecklistId;
         this.status = status;
         this.narrative = narrative;
@@ -59,8 +75,8 @@ public class Inspection implements TenantSupport {
         return propertyId;
     }
 
-    public Long getInspectorId() {
-        return inspectorId;
+    public Inspector getInspector() {
+        return inspector;
     }
 
     public Long getInspectionChecklistId() {
@@ -83,6 +99,14 @@ public class Inspection implements TenantSupport {
         return inspectorSignatureUrl;
     }
 
+    public List<InspectionAction> getInspectionActionList() {
+        return inspectionActionList;
+    }
+
+    public List<InspectionViolation> getInspectionViolationList() {
+        return inspectionViolationList;
+    }
+
     public Long getFdid() {
         return fdid;
     }
@@ -102,5 +126,9 @@ public class Inspection implements TenantSupport {
 
     public void setInspectorSignatureUrl(String inspectorSignatureUrl) {
         this.inspectorSignatureUrl = inspectorSignatureUrl;
+    }
+
+    public void setInspector(Inspector inspector) {
+        this.inspector = inspector;
     }
 }

@@ -3,12 +3,14 @@ package com.firerms.controller.integration;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.firerms.controller.InspectionController;
 import com.firerms.entity.inspections.Inspection;
+import com.firerms.entity.inspections.Inspector;
 import com.firerms.exception.EntityNotFoundException;
 import com.firerms.exception.IdNotNullException;
 import com.firerms.multiTenancy.RequestInterceptor;
 import com.firerms.multiTenancy.TenantContext;
 import com.firerms.request.InspectionRequest;
 import com.firerms.response.InspectionResponse;
+import com.firerms.security.entity.User;
 import com.firerms.security.service.CustomUserDetailsService;
 import com.firerms.security.util.JwtUtility;
 import com.firerms.service.InspectionService;
@@ -75,7 +77,8 @@ public class InspectionControllerIntTests {
     @Test
     @WithMockUser(username = "admin", authorities = { "SUPER_ADMIN" })
     void createInspectionTest() throws Exception {
-        Inspection inspection = new Inspection(null, 1L, 1L, 1L, "status",
+        Inspector inspector = new Inspector(null, 1L, "first", "last", "2035559944", 1L);
+        Inspection inspection = new Inspection(null, 1L, inspector, 1L, "status",
                 "narrative", "occupantSignatureUrl", "inspectorSignatureUrl", testFdid);
         InspectionRequest inspectionRequest = new InspectionRequest(inspection);
         InspectionResponse inspectionResponse = new InspectionResponse(inspection);
@@ -98,7 +101,8 @@ public class InspectionControllerIntTests {
     @WithMockUser(username = "admin", authorities = { "SUPER_ADMIN" })
     void createInspectionWithNonNullIdTest() throws Exception {
         String errorMessage = "id must be null for new Inspection";
-        Inspection inspection = new Inspection(1L, 1L, 1L, 1L, "status",
+        Inspector inspector = new Inspector(null, 1L, "first", "last", "2035559944", 1L);
+        Inspection inspection = new Inspection(1L, 1L, inspector, 1L, "status",
                 "narrative", "occupantSignatureUrl", "inspectorSignatureUrl", testFdid);
         InspectionRequest inspectionRequest = new InspectionRequest(inspection);
         String requestJson = new ObjectMapper().writeValueAsString(inspectionRequest);
@@ -124,7 +128,8 @@ public class InspectionControllerIntTests {
     @WithMockUser(username = "admin", authorities = { "SUPER_ADMIN" })
     void createInspectionChildEntityDoesNotExistTest() throws Exception {
         String errorMessage = "id must be null for new Inspection";
-        Inspection inspection = new Inspection(1L, 1L, 1L, 1L, "status",
+        Inspector inspector = new Inspector(null, 1L, "first", "last", "2035559944", 1L);
+        Inspection inspection = new Inspection(1L, 1L, inspector, 1L, "status",
                 "narrative", "occupantSignatureUrl", "inspectorSignatureUrl", testFdid);
         InspectionRequest inspectionRequest = new InspectionRequest(inspection);
         String requestJson = new ObjectMapper().writeValueAsString(inspectionRequest);
@@ -148,7 +153,8 @@ public class InspectionControllerIntTests {
 
     @Test
     void createInspectionUnauthorizedTest() throws Exception {
-        Inspection inspection = new Inspection(null, 1L, 1L, 1L, "status",
+        Inspector inspector = new Inspector(null, 1L, "first", "last", "2035559944", 1L);
+        Inspection inspection = new Inspection(null, 1L, inspector, 1L, "status",
                 "narrative", "occupantSignatureUrl", "inspectorSignatureUrl", testFdid);
         InspectionRequest inspectionRequest = new InspectionRequest(inspection);
         String requestJson = new ObjectMapper().writeValueAsString(inspectionRequest);
@@ -164,7 +170,8 @@ public class InspectionControllerIntTests {
     @Test
     @WithMockUser(username = "admin", authorities = { "SUPER_ADMIN" })
     void getInspectionTest() throws Exception {
-        Inspection inspection = new Inspection(1L, 1L, 1L, 1L, "status",
+        Inspector inspector = new Inspector(null, 1L, "first", "last", "2035559944", 1L);
+        Inspection inspection = new Inspection(1L, 1L, inspector, 1L, "status",
                 "narrative", "occupantSignatureUrl", "inspectorSignatureUrl", testFdid);
         InspectionResponse inspectionResponse = new InspectionResponse(inspection);
         when(inspectionService.findInspectionById(inspection.getInspectionId())).thenReturn(inspectionResponse);
@@ -209,7 +216,8 @@ public class InspectionControllerIntTests {
     @Test
     @WithMockUser(username = "admin", authorities = { "SUPER_ADMIN" })
     void updateInspectionTest() throws Exception {
-        Inspection inspection = new Inspection(1L, 1L, 1L, 1L, "status",
+        Inspector inspector = new Inspector(null, 1L, "first", "last", "2035559944", 1L);
+        Inspection inspection = new Inspection(1L, 1L, inspector, 1L, "status",
                 "narrative", "occupantSignatureUrl", "inspectorSignatureUrl", testFdid);
         InspectionRequest inspectionRequest = new InspectionRequest(inspection);
         InspectionResponse inspectionResponse = new InspectionResponse(inspection);
@@ -231,7 +239,8 @@ public class InspectionControllerIntTests {
     @Test
     @WithMockUser(username = "admin", authorities = { "SUPER_ADMIN" })
     void updateInspectionDoesNotExistTest() throws Exception {
-        Inspection inspection = new Inspection(null, 1L, 1L, 1L, "status",
+        Inspector inspector = new Inspector(null, 1L, "first", "last", "2035559944", 1L);
+        Inspection inspection = new Inspection(null, 1L, inspector, 1L, "status",
                 "narrative", "occupantSignatureUrl", "inspectorSignatureUrl", testFdid);
         InspectionRequest inspectionRequest = new InspectionRequest(inspection);
         String requestJson = new ObjectMapper().writeValueAsString(inspectionRequest);
@@ -258,7 +267,8 @@ public class InspectionControllerIntTests {
     @WithMockUser(username = "admin", authorities = { "SUPER_ADMIN" })
     void updateInspectionChildEntityDoesNotExistTest() throws Exception {
         String errorMessage = "id must be null for new Inspection";
-        Inspection inspection = new Inspection(1L, 1L, 1L, 1L, "status",
+        Inspector inspector = new Inspector(null, 1L, "first", "last", "2035559944", 1L);
+        Inspection inspection = new Inspection(1L, 1L, inspector, 1L, "status",
                 "narrative", "occupantSignatureUrl", "inspectorSignatureUrl", testFdid);
         InspectionRequest inspectionRequest = new InspectionRequest(inspection);
         String requestJson = new ObjectMapper().writeValueAsString(inspectionRequest);
@@ -282,7 +292,8 @@ public class InspectionControllerIntTests {
 
     @Test
     void updateInspectionUnauthorizedTest() throws Exception {
-        Inspection inspection = new Inspection(null, 1L, 1L, 1L, "status",
+        Inspector inspector = new Inspector(null, 1L, "first", "last", "2035559944", 1L);
+        Inspection inspection = new Inspection(null, 1L, inspector, 1L, "status",
                 "narrative", "occupantSignatureUrl", "inspectorSignatureUrl", testFdid);
         InspectionRequest inspectionRequest = new InspectionRequest(inspection);
         String requestJson = new ObjectMapper().writeValueAsString(inspectionRequest);

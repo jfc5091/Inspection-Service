@@ -73,13 +73,6 @@ public class InspectionService {
             LOG.error("Inspection Service - createInspectionChecklistItem request: {}", errorMessage);
             throw new EntityNotFoundException(errorMessage);
         }
-        Long inspectorId = inspection.getInspectorId();
-        Inspector inspector = inspectorRepository.findByInspectorId(inspectorId);
-        if (inspector == null) {
-            String errorMessage = String.format(NOT_FOUND_ERROR_MSG, "Inspector", inspectorId);
-            LOG.error("Inspection Service - createInspectionChecklistItem request: {}", errorMessage);
-            throw new EntityNotFoundException(errorMessage);
-        }
     }
 
     public InspectionResponse createInspection(InspectionRequest request) throws JsonProcessingException {
@@ -92,6 +85,8 @@ public class InspectionService {
             throw new IdNotNullException(errorMessage);
         }
         validateInspectionForeignKeys(inspection);
+        Inspector inspector = inspectorRepository.save(inspection.getInspector());
+        inspection.setInspector(inspector);
         inspection = inspectionRepository.save(inspection);
         InspectionResponse inspectionResponse = new InspectionResponse(inspection);
         String responseString = new ObjectMapper().writeValueAsString(inspectionResponse);

@@ -60,12 +60,13 @@ public class InspectionServiceUnitTests {
     @Transactional
     @Test
     void createInspectionTest() throws Exception {
-        Inspection inspection = new Inspection(null, 1L, 1L, 1L, "status",
+        Inspector inspector = new Inspector(null, 1L, "first", "last", "2035559944", 1L);
+        Inspection inspection = new Inspection(null, 1L, inspector, 1L, "status",
                 "narrative", "occupantSignatureUrl", "inspectorSignatureUrl", testFdid);
         when(inspectionRepository.save(inspection)).thenReturn(inspection);
         when(propertyRepository.findByPropertyId(inspection.getPropertyId())).thenReturn(new Property());
         when(inspectionChecklistRepository.findByInspectionChecklistId(inspection.getInspectionChecklistId())).thenReturn(new InspectionChecklist());
-        when(inspectorRepository.findByInspectorId(inspection.getInspectorId())).thenReturn(new Inspector());
+        when(inspectorRepository.findByInspectorId(inspection.getInspector().getInspectorId())).thenReturn(new Inspector());
         InspectionRequest inspectionRequest = new InspectionRequest(inspection);
 
         InspectionResponse savedInspectionResponse = inspectionService.createInspection(inspectionRequest);
@@ -73,7 +74,7 @@ public class InspectionServiceUnitTests {
 
         assertNotNull(savedInspection);
         assertEquals(inspection.getPropertyId(), savedInspection.getPropertyId());
-        assertEquals(inspection.getInspectorId(), savedInspection.getInspectorId());
+        assertEquals(inspection.getInspector(), savedInspection.getInspector());
         assertEquals(inspection.getInspectionChecklistId(), savedInspection.getInspectionChecklistId());
         assertEquals(inspection.getStatus(), savedInspection.getStatus());
         assertEquals(inspection.getNarrative(), savedInspection.getNarrative());
@@ -85,7 +86,8 @@ public class InspectionServiceUnitTests {
     @Transactional
     @Test
     void createInspectionWithNonNullIdTest() {
-        Inspection inspection = new Inspection(1L, 1L, 1L, 1L, "status",
+        Inspector inspector = new Inspector(null, 1L, "first", "last", "2035559944", 1L);
+        Inspection inspection = new Inspection(1L, 1L, inspector, 1L, "status",
                 "narrative", "occupantSignatureUrl", "inspectorSignatureUrl", testFdid);
         InspectionRequest inspectionRequest = new InspectionRequest(inspection);
 
@@ -100,7 +102,8 @@ public class InspectionServiceUnitTests {
     @Transactional
     @Test
     void createInspectionPropertyIdDoesNotExistTest() {
-        Inspection inspection = new Inspection(null, 1L, 1L, 1L, "status",
+        Inspector inspector = new Inspector(null, 1L, "first", "last", "2035559944", 1L);
+        Inspection inspection = new Inspection(null, 1L, inspector, 1L, "status",
                 "narrative", "occupantSignatureUrl", "inspectorSignatureUrl", testFdid);
         InspectionRequest inspectionRequest = new InspectionRequest(inspection);
         when(propertyRepository.findByPropertyId(inspection.getPropertyId())).thenReturn(null);
@@ -116,7 +119,8 @@ public class InspectionServiceUnitTests {
     @Transactional
     @Test
     void createInspectionChecklistIdDoesNotExistTest() {
-        Inspection inspection = new Inspection(null, 1L, 1L, 1L, "status",
+        Inspector inspector = new Inspector(null, 1L, "first", "last", "2035559944", 1L);
+        Inspection inspection = new Inspection(null, 1L, inspector, 1L, "status",
                 "narrative", "occupantSignatureUrl", "inspectorSignatureUrl", testFdid);
         InspectionRequest inspectionRequest = new InspectionRequest(inspection);
         when(propertyRepository.findByPropertyId(inspection.getPropertyId())).thenReturn(new Property());
@@ -133,12 +137,13 @@ public class InspectionServiceUnitTests {
     @Transactional
     @Test
     void createInspectionInspectorIdDoesNotExistTest() {
-        Inspection inspection = new Inspection(null, 1L, 1L, 1L, "status",
+        Inspector inspector = new Inspector(null, 1L, "first", "last", "2035559944", 1L);
+        Inspection inspection = new Inspection(null, 1L, inspector, 1L, "status",
                 "narrative", "occupantSignatureUrl", "inspectorSignatureUrl", testFdid);
         InspectionRequest inspectionRequest = new InspectionRequest(inspection);
         when(propertyRepository.findByPropertyId(inspection.getPropertyId())).thenReturn(new Property());
         when(inspectionChecklistRepository.findByInspectionChecklistId(inspection.getInspectionChecklistId())).thenReturn(new InspectionChecklist());
-        when(inspectorRepository.findByInspectorId(inspection.getInspectorId())).thenReturn(null);
+        when(inspectorRepository.findByInspectorId(inspection.getInspector().getInspectorId())).thenReturn(null);
 
         EntityNotFoundException exception = assertThrows(
                 EntityNotFoundException.class,
@@ -151,7 +156,8 @@ public class InspectionServiceUnitTests {
     @Transactional
     @Test
     void findInspectionByIdTest() throws Exception {
-        Inspection inspection = new Inspection(1L, 1L, 1L, 1L, "status",
+        Inspector inspector = new Inspector(null, 1L, "first", "last", "2035559944", 1L);
+        Inspection inspection = new Inspection(1L, 1L, inspector, 1L, "status",
                 "narrative", "occupantSignatureUrl", "inspectorSignatureUrl", testFdid);
         when(inspectionRepository.findByInspectionId(1L)).thenReturn(inspection);
 
@@ -160,7 +166,7 @@ public class InspectionServiceUnitTests {
 
         assertNotNull(foundInspection);
         assertEquals(inspection.getPropertyId(), foundInspection.getPropertyId());
-        assertEquals(inspection.getInspectorId(), foundInspection.getInspectorId());
+        assertEquals(inspection.getInspector(), foundInspection.getInspector());
         assertEquals(inspection.getInspectionChecklistId(), foundInspection.getInspectionChecklistId());
         assertEquals(inspection.getStatus(), foundInspection.getStatus());
         assertEquals(inspection.getNarrative(), foundInspection.getNarrative());
@@ -185,14 +191,15 @@ public class InspectionServiceUnitTests {
     @Transactional
     @Test
     void updateInspectionTest() throws Exception {
-        Inspection originalInspection = new Inspection(1L, 1L, 1L, 1L, "status",
+        Inspector inspector = new Inspector(null, 1L, "first", "last", "2035559944", 1L);
+        Inspection originalInspection = new Inspection(1L, 1L, inspector, 1L, "status",
                 "narrative", "occupantSignatureUrl", "inspectorSignatureUrl", testFdid);
-        Inspection updateInspection = new Inspection(1L, 1L, 1L, 1L, "new status",
+        Inspection updateInspection = new Inspection(1L, 1L, inspector, 1L, "new status",
                 "new narrative", "occupantSignatureUrl", "inspectorSignatureUrl", testFdid);
         when(inspectionRepository.findByInspectionId(updateInspection.getInspectionId())).thenReturn(originalInspection);
         when(propertyRepository.findByPropertyId(updateInspection.getPropertyId())).thenReturn(new Property());
         when(inspectionChecklistRepository.findByInspectionChecklistId(updateInspection.getInspectionChecklistId())).thenReturn(new InspectionChecklist());
-        when(inspectorRepository.findByInspectorId(updateInspection.getInspectorId())).thenReturn(new Inspector());
+        when(inspectorRepository.findByInspectorId(updateInspection.getInspector().getInspectorId())).thenReturn(new Inspector());
         when(inspectionRepository.save(updateInspection)).thenReturn(updateInspection);
         InspectionRequest updatedInspectionRequest = new InspectionRequest(updateInspection);
 
@@ -201,7 +208,7 @@ public class InspectionServiceUnitTests {
 
         assertNotNull(updatedInspection);
         assertEquals(updateInspection.getPropertyId(), updatedInspection.getPropertyId());
-        assertEquals(updateInspection.getInspectorId(), updatedInspection.getInspectorId());
+        assertEquals(updateInspection.getInspector(), updatedInspection.getInspector());
         assertEquals(updateInspection.getInspectionChecklistId(), updatedInspection.getInspectionChecklistId());
         assertEquals(updateInspection.getStatus(), updatedInspection.getStatus());
         assertEquals(updateInspection.getNarrative(), updatedInspection.getNarrative());
@@ -213,7 +220,8 @@ public class InspectionServiceUnitTests {
     @Transactional
     @Test
     void updateInspectionDoesNotExistTest() {
-        Inspection inspection = new Inspection(1L, 1L, 1L, 1L, "status",
+        Inspector inspector = new Inspector(null, 1L, "first", "last", "2035559944", 1L);
+        Inspection inspection = new Inspection(1L, 1L, inspector, 1L, "status",
                 "narrative", "occupantSignatureUrl", "inspectorSignatureUrl", testFdid);
         when(inspectionRepository.findByInspectionId(inspection.getInspectionId())).thenReturn(null);
         InspectionRequest inspectionRequest = new InspectionRequest(inspection);
@@ -229,7 +237,8 @@ public class InspectionServiceUnitTests {
     @Transactional
     @Test
     void updateInspectionPropertyIdDoesNotExistTest() {
-        Inspection inspection = new Inspection(1L, 1L, 1L, 1L, "status",
+        Inspector inspector = new Inspector(null, 1L, "first", "last", "2035559944", 1L);
+        Inspection inspection = new Inspection(1L, 1L, inspector, 1L, "status",
                 "narrative", "occupantSignatureUrl", "inspectorSignatureUrl", testFdid);
         InspectionRequest inspectionRequest = new InspectionRequest(inspection);
         when(inspectionRepository.findByInspectionId(inspection.getInspectionId())).thenReturn(inspection);
@@ -246,7 +255,8 @@ public class InspectionServiceUnitTests {
     @Transactional
     @Test
     void updateInspectionChecklistIdDoesNotExistTest() {
-        Inspection inspection = new Inspection(1L, 1L, 1L, 1L, "status",
+        Inspector inspector = new Inspector(null, 1L, "first", "last", "2035559944", 1L);
+        Inspection inspection = new Inspection(1L, 1L, inspector, 1L, "status",
                 "narrative", "occupantSignatureUrl", "inspectorSignatureUrl", testFdid);
         InspectionRequest inspectionRequest = new InspectionRequest(inspection);
         when(inspectionRepository.findByInspectionId(inspection.getInspectionId())).thenReturn(inspection);
@@ -264,13 +274,14 @@ public class InspectionServiceUnitTests {
     @Transactional
     @Test
     void updateInspectionInspectorIdDoesNotExistTest() {
-        Inspection inspection = new Inspection(1L, 1L, 1L, 1L, "status",
+        Inspector inspector = new Inspector(null, 1L, "first", "last", "2035559944", 1L);
+        Inspection inspection = new Inspection(1L, 1L, inspector, 1L, "status",
                 "narrative", "occupantSignatureUrl", "inspectorSignatureUrl", testFdid);
         InspectionRequest inspectionRequest = new InspectionRequest(inspection);
         when(inspectionRepository.findByInspectionId(inspection.getInspectionId())).thenReturn(inspection);
         when(propertyRepository.findByPropertyId(inspection.getPropertyId())).thenReturn(new Property());
         when(inspectionChecklistRepository.findByInspectionChecklistId(inspection.getInspectionChecklistId())).thenReturn(new InspectionChecklist());
-        when(inspectorRepository.findByInspectorId(inspection.getInspectorId())).thenReturn(null);
+        when(inspectorRepository.findByInspectorId(inspection.getInspector().getInspectorId())).thenReturn(null);
 
         EntityNotFoundException exception = assertThrows(
                 EntityNotFoundException.class,
@@ -283,7 +294,8 @@ public class InspectionServiceUnitTests {
     @Transactional
     @Test
     void deleteInspectionTest() {
-        Inspection inspection = new Inspection(1L, 1L, 1L, 1L, "status",
+        Inspector inspector = new Inspector(null, 1L, "first", "last", "2035559944", 1L);
+        Inspection inspection = new Inspection(1L, 1L, inspector, 1L, "status",
                 "narrative", "occupantSignatureUrl", "inspectorSignatureUrl", testFdid);
         when(inspectionRepository.findByInspectionId(inspection.getInspectionId())).thenReturn(inspection);
 

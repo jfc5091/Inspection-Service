@@ -1,12 +1,13 @@
 package com.firerms.entity.checklists;
 
-import com.firerms.entity.property.Property;
 import com.firerms.multiTenancy.TenantSupport;
 import org.hibernate.annotations.Filter;
 import org.hibernate.annotations.FilterDef;
 import org.hibernate.annotations.ParamDef;
 
 import javax.persistence.*;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @Table(name = "INSPECTION_CHECKLIST")
@@ -22,6 +23,12 @@ public class InspectionChecklist implements TenantSupport {
     private String type;
     @Column(name = "ENABLED")
     private boolean enabled;
+    @OneToMany(
+            mappedBy = "inspectionChecklistId",
+            cascade = CascadeType.ALL,
+            orphanRemoval = true
+    )
+    private final List<InspectionChecklistItem> inspectionChecklistItemList = new ArrayList<>();
     @Column(name = "FDID")
     private Long fdid;
 
@@ -46,6 +53,10 @@ public class InspectionChecklist implements TenantSupport {
 
     public boolean isEnabled() {
         return enabled;
+    }
+
+    public List<InspectionChecklistItem> getInspectionChecklistItemList() {
+        return inspectionChecklistItemList;
     }
 
     public Long getFdid() {
